@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+  kadira-engine:
+    image: vladgolubev/kadira-engine
+    environment:
+      - MONGO_URL=mongodb://mongodb/apm
+      - MONGO_SHARD_URL_one=mongodb://mongodb/apm
+      - PORT=11011
+    ports:
+      - "11011:11011"
+    restart: always
+    depends_on:
+        - mongodb
+
+  kadira-rma:
+    image: dkoo761/kadira-rma
+    environment:
+      - MONGO_URL=mongodb://mongodb/apm
+    restart: always
+    depends_on:
+        - mongodb
+
+  kadira-ui:
+    image: vladgolubev/kadira-ui
+    environment:
+      - MONGO_URL=mongodb://mongodb/apm
+      - MONGO_SHARD_URL_one=mongodb://mongodb/apm
+    ports:
+      - "4000:4000"
+    restart: always
+    depends_on:
+        - mongodb
+        
+  mongodb:
+    image: mongo
+    ports:
+    - "27018:27017"
+    restart: always
